@@ -237,8 +237,7 @@ The \texttt{evonet} object has two matrices: 1) standard edge matrix with two co
 \KeywordTok{library}\NormalTok{(ape)}
 \NormalTok{net =}\StringTok{ "((a:2,(b:1)#H1:1):1,(#H1,c:1):2);"}
 \NormalTok{enet <-}\StringTok{ }\KeywordTok{read.evonet}\NormalTok{(}\DataTypeTok{text=}\NormalTok{net)}
-\NormalTok{p2 =}\StringTok{ }\KeywordTok{ggevonet}\NormalTok{(enet, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color=}\NormalTok{hybridEdge)) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{geom_tiplab}\NormalTok{() }
+\NormalTok{p2 =}\StringTok{ }\KeywordTok{ggevonet}\NormalTok{(enet) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_tiplab}\NormalTok{() }
 \end{Highlighting}
 \end{Shaded}
 

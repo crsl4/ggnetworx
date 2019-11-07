@@ -104,10 +104,11 @@ The `evonet` object has two matrices: 1) standard edge matrix with two columns f
 library(ape)
 net = "((a:2,(b:1)#H1:1):1,(#H1,c:1):2);"
 enet <- read.evonet(text=net)
-p2 = ggevonet(enet, aes(color=hybridEdge)) + 
-    geom_tiplab() 
+p2 = ggevonet(enet) + geom_tiplab() 
 ```
 
 ```{r enet, out.width='60%', fig.cap="Explicit network from extended Newick format", fig.pos='H', fig.align='center'}
 p2
 ```
+
+\missing{maybe we want to remove the basic split and explicit network plots and only show the cool plots. we need to show here all the cool functionalities of ggtree but now on networks}
