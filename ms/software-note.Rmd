@@ -1,12 +1,12 @@
 --- 
-title: "ggnetworkx: R package for the visualization of implicit and explicit phylogenetic networks"
+title: "tanggle: An R package for the visualization of implicit and explicit phylogenetic networks"
 author: klaus, marta, leann, francisco, eran, claudia
 site: bookdown::bookdown_site
 output: 
-   bookdown::pdf_book:
-     toc: false
-     citation_package: natbib
-     keep_tex: yes
+   pdf_document:
+    toc: false
+    citation_package: natbib
+    keep_tex: yes
 header-includes:
 - \usepackage[dvipsnames]{xcolor}
 - \newcommand{\missing}[1]{\textcolor{red}{\textbf{#1}}}
@@ -111,9 +111,8 @@ p2 = ggevonet(enet) + geom_tiplab()
 p2
 ```
 
-\missing{maybe we want to remove the basic split and explicit network plots and only show the cool plots. we need to show here all the cool functionalities of ggtree but now on networks}
 
-# Split network for the Neobatrachus genus 
+# Split network for the _Neobatrachus_ genus 
 
 \missing{(Marta: add here short description of genus)}.
 
@@ -133,10 +132,16 @@ p3
 \missing{(add here short description of whales)}.
 
 ```{r, echo=FALSE}
-whalesnet = read.evonet(text="(Mno00,Bph03,(((Bmu,(Bbo01,Bbo02):9.41949690722463):1.6484045144986545,(Bac00,((balMys,Egl00):9.055782863234407)#H13:5.268095830633961::0.8331903627712247):1.100383484076166):0.066043783465627,((Erob02,Erob01):9.997600013276905,#H13:0.19346605673125924::0.16680963722877526):0.35164828246609625):2.146642742731017);")
+whalesnet = read.evonet(text="(((balMys,Egl00):9.055782863234407)#H13:2.6340479153169807::0.8331903627712247,(Bac00,(((Bbo01,Bbo02):9.41949690722463,(Bmu,#H:0.0::0.013010091110208823)):1.6484045144986545,((#H13:0.19346605673125924::0.16680963722877526,((Erob02,Erob01):1.7595289284120899)#H:8.238071084864815::0.9869899088897912):0.35164828246609625,(Mno00,Bph03):2.146642742731017):0.066043783465627):1.100383484076166):2.6340479153169807);")
 
-p4 = ggevonet(whalesnet, layout = "slanted")+geom_tiplab()
+label <- whalesnet$tip.label
+library(ggimage)
+p4 = ggevonet(whalesnet,layout = "slanted") +
+    xlim(NA, 10)  +
+    geom_tiplab(aes(image=paste0('figures/',label, '.png')), geom="image",
+                offset=1.5, align=2, size=.15)+
+    geom_tiplab(geom='label', offset=0.5, hjust=.1)
 ```
-```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
+```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='left'}
 p4
 ```

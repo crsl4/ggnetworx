@@ -24,7 +24,7 @@
 \usepackage[margin=0.8in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={ggnetworkx: R package for the visualization of implicit and explicit phylogenetic networks},
+            pdftitle={tanggle: An R package for the visualization of implicit and explicit phylogenetic networks},
             pdfauthor={klaus, marta, leann, francisco, eran, claudia},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -71,7 +71,6 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -90,7 +89,7 @@
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{0}
 % Redefines (sub)paragraphs to behave more like sections
 \ifx\paragraph\undefined\else
 \let\oldparagraph\paragraph
@@ -117,7 +116,8 @@
 
 \setlength{\droptitle}{-2em}
 
-  \title{ggnetworkx: R package for the visualization of implicit and explicit phylogenetic networks}
+  \title{tanggle: An R package for the visualization of implicit and explicit
+phylogenetic networks}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
     \author{klaus, marta, leann, francisco, eran, claudia}
@@ -139,28 +139,64 @@
 \textbf{Abstract} 
 \end{center}
 
-Here we present an extension to the widely used visualization package \texttt{ggtree} to the case of phylogenetic networks. Our packages allows a variety of input data from DNA sequences to extended Newick format, and allows the user to plot the networks with great flexibility given that the many functionalities such as\ldots{}
+Here we present an extension to the widely used visualization package
+\texttt{ggtree} to the case of phylogenetic networks. Our packages
+allows a variety of input data from DNA sequences to extended Newick
+format, and allows the user to plot the networks with great flexibility
+given that the many functionalities such as\ldots{}
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Phylogenetic trees are used to represent evolutionary relationships between organisms. However, the tree is a strictly bifurcating structure that does not capture reticulate evolution like horizontal gene transfer, hybridization or introgression.
+Phylogenetic trees are used to represent evolutionary relationships
+between organisms. However, the tree is a strictly bifurcating structure
+that does not capture reticulate evolution like horizontal gene
+transfer, hybridization or introgression.
 
-Recent years have seen an explosion of phylogenetic network inference methods (\textcolor{red}{\textbf{cite everybody}}). These methods can be divided into two main classes: methods to reconstruct implicit (or split) networks, and methods to reconstruct explicit networks. Implicit networks are data-displayed objects that include two (or more) options for every uncertain split. For example, in figure \textcolor{red}{\textbf{bla}}, there are two possible ways to resolve the uncertain split, but the input data (DNA sequences or gene trees) does not provide enough information to distinguish which one is the ``correct'' split. Or alternatively, both splits are ``correct'' in that there is a pattern of gene flow among these species. Split networks are fast to reconstruct, but they are limited in their interpretations are they cannot tell us if the discordant splits are due to gene tree estimation error, ILS or actual gene flow.
-Explicit networks, on the contrary, assign a biological mechanism to every internal node, and thus they are easier to interpret. For example, in figure \textcolor{red}{\textbf{bla}}, the hybrid node corresponds to some reticulation event, and the tree nodes correspond to speciation events. Explicit networks are still limited in that they cannot identify the specific biological mechanism behind a hybrid node (hybridization, horizontal gene transfer, introgression), but hybrid edges are parametrized by an inheritance probability (\(\gamma\)) that can provide more information. For example, an estimated \(\hat{\gamma} \approx 0.5\) could indicate a hybridization event, whereas smaller estimated \(\hat{\gamma} \approx 0.01\) could refer to horizontal gene transfer. The downside of explicit networks is that they are harder to reconstruct, and existing inference methods\textcolor{red}{\textbf{(reference)}} are not scalable enough to handle big data.
+Recent years have seen an explosion of phylogenetic network inference
+methods (\textcolor{red}{\textbf{cite everybody}}). These methods can be
+divided into two main classes: methods to reconstruct implicit (or
+split) networks, and methods to reconstruct explicit networks. Implicit
+networks are data-displayed objects that include two (or more) options
+for every uncertain split. For example, in figure
+\textcolor{red}{\textbf{bla}}, there are two possible ways to resolve
+the uncertain split, but the input data (DNA sequences or gene trees)
+does not provide enough information to distinguish which one is the
+``correct'' split. Or alternatively, both splits are ``correct'' in that
+there is a pattern of gene flow among these species. Split networks are
+fast to reconstruct, but they are limited in their interpretations are
+they cannot tell us if the discordant splits are due to gene tree
+estimation error, ILS or actual gene flow. Explicit networks, on the
+contrary, assign a biological mechanism to every internal node, and thus
+they are easier to interpret. For example, in figure
+\textcolor{red}{\textbf{bla}}, the hybrid node corresponds to some
+reticulation event, and the tree nodes correspond to speciation events.
+Explicit networks are still limited in that they cannot identify the
+specific biological mechanism behind a hybrid node (hybridization,
+horizontal gene transfer, introgression), but hybrid edges are
+parametrized by an inheritance probability (\(\gamma\)) that can provide
+more information. For example, an estimated \(\hat{\gamma} \approx 0.5\)
+could indicate a hybridization event, whereas smaller estimated
+\(\hat{\gamma} \approx 0.01\) could refer to horizontal gene transfer.
+The downside of explicit networks is that they are harder to
+reconstruct, and existing inference
+methods\textcolor{red}{\textbf{(reference)}} are not scalable enough to
+handle big data.
 
 \vspace{-0.25cm}
 
 \hypertarget{extended-newick-format}{%
 \subsection{Extended Newick format}\label{extended-newick-format}}
 
-Traditionally, phylogenetic trees are written in Newick format (\textcolor{red}{\textbf{reference}}). To represent network objects, we use the
-extended Newick format (Morin and Moret 2006; Than et
-al.~2008; Cardona et al.~2008a, 2008b).
-This format uses the concept of minor
+Traditionally, phylogenetic trees are written in Newick format
+(\textcolor{red}{\textbf{reference}}). To represent network objects, we
+use the extended Newick format (Morin and Moret 2006; Than et al.~2008;
+Cardona et al.~2008a, 2008b). This format uses the concept of minor
 hybrid edges (edges with \(\gamma < 0.5\)) and major hybrid edges
-(\(\gamma > 0.5\)). By default, we detach the minor hybrid edge at each hybrid node to write the extended Newick
-description of a network as we would for a tree, with a repeated label, that of the hybrid node (`\#H1' in figure \ref{fig:netNewick}). This description can include edge
+(\(\gamma > 0.5\)). By default, we detach the minor hybrid edge at each
+hybrid node to write the extended Newick description of a network as we
+would for a tree, with a repeated label, that of the hybrid node (`\#H1'
+in figure @ref(fig:netNewick)). This description can include edge
 information, formatted as :length:support:\(\gamma\).
 
 \begin{figure}
@@ -172,38 +208,78 @@ information, formatted as :length:support:\(\gamma\).
 \caption{Extended Newick format for networks: (((A,(B)\#H1),(C,\#H1)),D); The network is written as a tree with two nodes having the same label \#H1.}\label{fig:netNewick}
 \end{figure}
 
-For example, the parenthetical format of the network in figure \ref{fig:netNewick} can include \(\gamma\) values:
+For example, the parenthetical format of the network in figure
+@ref(fig:netNewick) can include \(\gamma\) values:
 
 \texttt{(((A,(B)\#H1:::0.8),(C,\#H1:::0.2)),D);},
 
-which are written after three colons, because there is no information about branch length nor support for the hybrid edges. Other internal edges (tree edges) have information about branch lengths, which follow just one colon. These tree edges do not have information about \(\gamma\), because all tree edges have \(\gamma=1\).
+which are written after three colons, because there is no information
+about branch length nor support for the hybrid edges. Other internal
+edges (tree edges) have information about branch lengths, which follow
+just one colon. These tree edges do not have information about
+\(\gamma\), because all tree edges have \(\gamma=1\).
 
 \hypertarget{ggnetworkx-package}{%
-\section{\texorpdfstring{\texttt{ggnetworkx} package}{ggnetworkx package}}\label{ggnetworkx-package}}
+\section{\texorpdfstring{\texttt{ggnetworkx}
+package}{ggnetworkx package}}\label{ggnetworkx-package}}
 
-The \texttt{ggnetworkx} package extends the already widely used \texttt{ggtree} (\textcolor{red}{\textbf{references}}) to implicit and explicit phylogenetic networks. Our package has two main functions: \texttt{ggsplitnet} that plots split networks, and \texttt{ggevonet} that plots explicit networks.
+The \texttt{ggnetworkx} package extends the already widely used
+\texttt{ggtree} (\textcolor{red}{\textbf{references}}) to implicit and
+explicit phylogenetic networks. Our package has two main functions:
+\texttt{ggsplitnet} that plots split networks, and \texttt{ggevonet}
+that plots explicit networks.
 
 \vspace{-0.25cm}
 
 \hypertarget{reconstructing-and-plotting-a-split-network}{%
-\subsection{Reconstructing and plotting a split network}\label{reconstructing-and-plotting-a-split-network}}
+\subsection{Reconstructing and plotting a split
+network}\label{reconstructing-and-plotting-a-split-network}}
 
-There are three types of input data that our package takes to get a split network:
+There are three types of input data that our package takes to get a
+split network:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Nexus file created with SplitsTree (\textcolor{red}{\textbf{reference}}) which is read with the \texttt{read.nexus.networx} function in the \texttt{phangorn} package.
+  Nexus file created with SplitsTree
+  (\textcolor{red}{\textbf{reference}}) which is read with the
+  \texttt{read.nexus.networx} function in the \texttt{phangorn} package.
 \item
-  Collection of gene trees (e.g.~from RAxML\textcolor{red}{\textbf{(reference)}} or MrBayes\textcolor{red}{\textbf{(reference)}}) in a nexus file, or in a text file with one row per gene tree in Newick format. These trees are read with the functions \texttt{read.tree} or \texttt{read.nexus}. A consensus split network is then computed using the \texttt{consensusNet} function in the \texttt{phangorn} package \textcolor{red}{\textbf{(reference)}}. This function implements the algorithm in \textcolor{red}{\textbf{(reference)}}.
+  Collection of gene trees (e.g.~from
+  RAxML\textcolor{red}{\textbf{(reference)}} or
+  MrBayes\textcolor{red}{\textbf{(reference)}}) in a nexus file, or in a
+  text file with one row per gene tree in Newick format. These trees are
+  read with the functions \texttt{read.tree} or \texttt{read.nexus}. A
+  consensus split network is then computed using the
+  \texttt{consensusNet} function in the \texttt{phangorn} package
+  \textcolor{red}{\textbf{(reference)}}. This function implements the
+  algorithm in \textcolor{red}{\textbf{(reference)}}.
 \item
-  Sequences in nexus, fasta or phylip format read with the \texttt{read.phyDat} function in \texttt{phangorn} package or the \texttt{read.dna} function in \texttt{ape} package. Distance matrices are computed then for specific models of evolution using the function \texttt{dist.ml} from \texttt{phangorn} package or the function \texttt{dist.dna} from \texttt{ape} package. From the distance matrix, a split network is reconstructed using the \texttt{neighborNet} function in the \texttt{phangorn} package. This function implements the algorithm in \textcolor{red}{\textbf{(reference)}}. In this case, there is the option to estimate branch lengths as well (which is not usually the case for split networks) with the function \texttt{splitsNetworks} in the \texttt{phangorn} package.
+  Sequences in nexus, fasta or phylip format read with the
+  \texttt{read.phyDat} function in \texttt{phangorn} package or the
+  \texttt{read.dna} function in \texttt{ape} package. Distance matrices
+  are computed then for specific models of evolution using the function
+  \texttt{dist.ml} from \texttt{phangorn} package or the function
+  \texttt{dist.dna} from \texttt{ape} package. From the distance matrix,
+  a split network is reconstructed using the \texttt{neighborNet}
+  function in the \texttt{phangorn} package. This function implements
+  the algorithm in \textcolor{red}{\textbf{(reference)}}. In this case,
+  there is the option to estimate branch lengths as well (which is not
+  usually the case for split networks) with the function
+  \texttt{splitsNetworks} in the \texttt{phangorn} package.
 \end{enumerate}
 
-After any of these three steps, we have a \texttt{networkx} object that represents a split network by two matrices: 1) standard edge matrix with two columns for the two nodes connecting every edge (row), and 2) split vector with integer identifier for every edge. Each entry in this vector represents the split that each edge is representing. In split networks, there are more edges than splits as two (or more) edges could represent the same split (see figure \textcolor{red}{\textbf{bla}}).
+After any of these three steps, we have a \texttt{networkx} object that
+represents a split network by two matrices: 1) standard edge matrix with
+two columns for the two nodes connecting every edge (row), and 2) split
+vector with integer identifier for every edge. Each entry in this vector
+represents the split that each edge is representing. In split networks,
+there are more edges than splits as two (or more) edges could represent
+the same split (see figure \textcolor{red}{\textbf{bla}}).
 
-The \texttt{ggsplitnet} function takes a \texttt{networkx} object as input, and produces a plot.
+The \texttt{ggsplitnet} function takes a \texttt{networkx} object as
+input, and produces a plot.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -225,12 +301,26 @@ The \texttt{ggsplitnet} function takes a \texttt{networkx} object as input, and 
 \end{figure}
 
 \hypertarget{plotting-explicit-networks}{%
-\subsection{Plotting explicit networks}\label{plotting-explicit-networks}}
+\subsection{Plotting explicit
+networks}\label{plotting-explicit-networks}}
 
-Algorithms to reconstruct explicit networks are more computationally intensive than those to reconstruct split networks. Thus, to the best of our knowledge, there are no R functions that would estimate an explicit network from sequences or from gene trees. To obtain an explicit network, users need to use existing tools like PhyloNet\textcolor{red}{\textbf{(reference)}}, BEAST\textcolor{red}{\textbf{(reference)}} or SNaQ\textcolor{red}{\textbf{(reference)}}.
-These methods take sequences or gene trees as input and estimate an explicit network which is represented in extended Newick format. The explicit network is read with the \texttt{ape} function \texttt{read.evonet} and an \texttt{evonet} object is created.
+Algorithms to reconstruct explicit networks are more computationally
+intensive than those to reconstruct split networks. Thus, to the best of
+our knowledge, there are no R functions that would estimate an explicit
+network from sequences or from gene trees. To obtain an explicit
+network, users need to use existing tools like
+PhyloNet\textcolor{red}{\textbf{(reference)}},
+BEAST\textcolor{red}{\textbf{(reference)}} or
+SNaQ\textcolor{red}{\textbf{(reference)}}. These methods take sequences
+or gene trees as input and estimate an explicit network which is
+represented in extended Newick format. The explicit network is read with
+the \texttt{ape} function \texttt{read.evonet} and an \texttt{evonet}
+object is created.
 
-The \texttt{evonet} object has two matrices: 1) standard edge matrix with two columns for the two nodes connecting every edge (row), and 2) hybrid edges matrix with two columns for the nodes connected by the hybrid edge (row).
+The \texttt{evonet} object has two matrices: 1) standard edge matrix
+with two columns for the two nodes connecting every edge (row), and 2)
+hybrid edges matrix with two columns for the nodes connected by the
+hybrid edge (row).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -253,7 +343,8 @@ The \texttt{evonet} object has two matrices: 1) standard edge matrix with two co
 \textcolor{red}{\textbf{maybe we want to remove the basic split and explicit network plots and only show the cool plots. we need to show here all the cool functionalities of ggtree but now on networks}}
 
 \hypertarget{split-network-for-the-neobatrachus-genus}{%
-\section{Split network for the Neobatrachus genus}\label{split-network-for-the-neobatrachus-genus}}
+\section{Split network for the Neobatrachus
+genus}\label{split-network-for-the-neobatrachus-genus}}
 
 \textcolor{red}{\textbf{(Marta: add here short description of genus)}}.
 
@@ -267,15 +358,14 @@ The \texttt{evonet} object has two matrices: 1) standard edge matrix with two co
 \end{figure}
 
 \hypertarget{explicit-network-for-whales}{%
-\section{Explicit network for whales}\label{explicit-network-for-whales}}
+\section{Explicit network for
+whales}\label{explicit-network-for-whales}}
 
 \textcolor{red}{\textbf{(add here short description of whales)}}.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/whalesnet-1} 
-
-}
+\includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/whalesnet-1} \hfill{}
 
 \caption{Explicit network for whales}\label{fig:whalesnet}
 \end{figure}
