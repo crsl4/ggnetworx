@@ -112,3 +112,31 @@ p2
 ```
 
 \missing{maybe we want to remove the basic split and explicit network plots and only show the cool plots. we need to show here all the cool functionalities of ggtree but now on networks}
+
+# Split network for the Neobatrachus genus 
+
+\missing{(Marta: add here short description of genus)}.
+
+```{r, echo=FALSE}
+library(phangorn)
+trees = read.nexus("data-analysis/output.nex")
+frognet = consensusNet(trees)
+p3 = ggsplitnet(frognet)+geom_tiplab2()
+```
+
+```{r frognet, out.width='60%', fig.cap="Explicit network for Neobatrachus genus frogs", fig.pos='H', fig.align='center'}
+p3
+```
+
+# Explicit network for whales
+
+\missing{(add here short description of whales)}.
+
+```{r, echo=FALSE}
+whalesnet = read.evonet(text="(Mno00,Bph03,(((Bmu,(Bbo01,Bbo02):9.41949690722463):1.6484045144986545,(Bac00,((balMys,Egl00):9.055782863234407)#H13:5.268095830633961::0.8331903627712247):1.100383484076166):0.066043783465627,((Erob02,Erob01):9.997600013276905,#H13:0.19346605673125924::0.16680963722877526):0.35164828246609625):2.146642742731017);")
+
+p4 = ggevonet(whalesnet, layout = "slanted")+geom_tiplab()
+```
+```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
+p4
+```
