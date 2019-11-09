@@ -14,7 +14,7 @@ header-includes:
 - \usepackage{array,ragged2e}
 - \usepackage{float}
 documentclass: IEEEtran
-bibliography: ggnetworkx.bib
+bibliography: ggnetworx.bib
 biblio-style: apalike
 geometry: margin=0.8in
 link-citations: yes
@@ -62,9 +62,9 @@ For example, the parenthetical format of the network in figure \@ref(fig:netNewi
 
 which are written after three colons, because there is no information about branch length nor support for the hybrid edges. Other internal edges (tree edges) have information about branch lengths, which follow just one colon. These tree edges do not have information about $\gamma$, because all tree edges have $\gamma=1$.
 
-# `ggnetworkx` package
+# `tanggle` package
 
-The `ggnetworkx` package extends the already widely used `ggtree` (\missing{references}) to implicit and explicit phylogenetic networks. Our package has two main functions: `ggsplitnet` that plots split networks, and `ggevonet` that plots explicit networks.
+The `tanggle` package extends the already widely used `ggtree` (\missing{references}) to implicit and explicit phylogenetic networks. Our package has two main functions: `ggsplitnet` that plots split networks, and `ggevonet` that plots explicit networks.
 
 \vspace{-0.25cm}
 ## Reconstructing and plotting a split network
@@ -117,10 +117,20 @@ p2
 \missing{(Marta: add here short description of genus)}.
 
 ```{r, echo=FALSE}
+## https://yulab-smu.github.io/treedata-book/chapter4.html#visualizing-phylogenetic-tree-with-ggtree
 library(phangorn)
 trees = read.nexus("data-analysis/output.nex")
 frognet = consensusNet(trees)
-p3 = ggsplitnet(frognet)+geom_tiplab2()
+frog.fortify <- ggnetworx:::fortify.networx(frognet)
+branch <- c(1:18) ##this is not what branch should be
+frog.fortify <- data.frame(frog.fortify, branch)
+p3 = ggsplitnet(frognet)+geom_tiplab2()+
+    geom_hilight_encircle(node=15, alpha=0.4, fill = "steelblue",
+                          branch.length =frog.fortify$branch.length,
+                          extend = 0) +
+    geom_hilight_encircle(node=16, alpha=0.4, fill = "green",
+                          branch.length = frog.fortify$branch.length,
+                          extend = 0)
 ```
 
 ```{r frognet, out.width='60%', fig.cap="Explicit network for Neobatrachus genus frogs", fig.pos='H', fig.align='center'}
@@ -140,8 +150,16 @@ p4 = ggevonet(whalesnet,layout = "slanted") +
     xlim(NA, 10)  +
     geom_tiplab(aes(image=paste0('figures/',label, '.png')), geom="image",
                 offset=1.5, align=2, size=.15)+
-    geom_tiplab(geom='label', offset=0.5, hjust=.1)
+    geom_tiplab(geom='label', offset=0.5, hjust=.1)+
+    geom_hilight(node=22)
 ```
-```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='left'}
+```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
 p4
 ```
+
+# Discussion
+
+The area of phylogenetic networks is very active. There are multiple developments on the inference of networks, as well as on the visualization. Furthermore, there are many new developments in the area of comparative methods on networks \missing{(references: bastide, brian)}. Our R package `tanggle` is certainly not the first software for the visualization of networks. Dendroscope \missing{(reference)}, and SplitsTree \missing{(reference)} are the pioneers of network visualization, with multiple functionalities being added constantly. In R, the widely used `ape` package \missing{(reference)} has extended the base plot function to visualize explicit networks, but no functionalities still to plot implicit networks. In julia, `PhyloPlots` is the accompanying package of `PhyloNetworks` \missing{(reference)} which is able to plot rooted explicit networks, but no implicit networks or unrooted.
+
+`tanggle` is complementing the `ape` plotting function in two main ways: 1) allowing to plot implicit networks, 2) building on the flexibility of `ggtree` \missing{(reference)} (which in turns builds on the flexibility of `ggplot2` \missing{(reference)}) to manipulate the structure, nodes and edges in the network.
+With the increase (and timely) pressure for reproducible research, limiting the use of design software like Adobe Illustrator to produce publication figures is paramount. The R package `ggtree` and now `tanggle` work towards script-based publication figures that can incorporate colors, images and mapped morphological and geographical characteristics.

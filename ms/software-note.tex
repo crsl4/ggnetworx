@@ -219,11 +219,11 @@ edges (tree edges) have information about branch lengths, which follow
 just one colon. These tree edges do not have information about
 \(\gamma\), because all tree edges have \(\gamma=1\).
 
-\hypertarget{ggnetworkx-package}{%
-\section{\texorpdfstring{\texttt{ggnetworkx}
-package}{ggnetworkx package}}\label{ggnetworkx-package}}
+\hypertarget{tanggle-package}{%
+\section{\texorpdfstring{\texttt{tanggle}
+package}{tanggle package}}\label{tanggle-package}}
 
-The \texttt{ggnetworkx} package extends the already widely used
+The \texttt{tanggle} package extends the already widely used
 \texttt{ggtree} (\textcolor{red}{\textbf{references}}) to implicit and
 explicit phylogenetic networks. Our package has two main functions:
 \texttt{ggsplitnet} that plots split networks, and \texttt{ggevonet}
@@ -340,11 +340,9 @@ hybrid edge (row).
 \caption{Explicit network from extended Newick format}\label{fig:enet}
 \end{figure}
 
-\textcolor{red}{\textbf{maybe we want to remove the basic split and explicit network plots and only show the cool plots. we need to show here all the cool functionalities of ggtree but now on networks}}
-
 \hypertarget{split-network-for-the-neobatrachus-genus}{%
-\section{Split network for the Neobatrachus
-genus}\label{split-network-for-the-neobatrachus-genus}}
+\section{\texorpdfstring{Split network for the \emph{Neobatrachus}
+genus}{Split network for the Neobatrachus genus}}\label{split-network-for-the-neobatrachus-genus}}
 
 \textcolor{red}{\textbf{(Marta: add here short description of genus)}}.
 
@@ -365,12 +363,47 @@ whales}\label{explicit-network-for-whales}}
 
 \begin{figure}[H]
 
-\includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/whalesnet-1} \hfill{}
+{\centering \includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/whalesnet-1} 
+
+}
 
 \caption{Explicit network for whales}\label{fig:whalesnet}
 \end{figure}
 
-\bibliography{ggnetworkx.bib}
+\includegraphics{software-note_files/figure-latex/unnamed-chunk-5-1.pdf}
+\# Discussion
+
+The area of phylogenetic networks is very active. There are multiple
+developments on the inference of networks, as well as on the
+visualization. Furthermore, there are many new developments in the area
+of comparative methods on networks
+\textcolor{red}{\textbf{(references: bastide, brian)}}. Our R package
+\texttt{tanggle} is certainly not the first software for the
+visualization of networks. Dendroscope
+\textcolor{red}{\textbf{(reference)}}, and SplitsTree
+\textcolor{red}{\textbf{(reference)}} are the pioneers of network
+visualization, with multiple functionalities being added constantly. In
+R, the widely used \texttt{ape} package
+\textcolor{red}{\textbf{(reference)}} has extended the base plot
+function to visualize explicit networks, but no functionalities still to
+plot implicit networks. In julia, \texttt{PhyloPlots} is the
+accompanying package of \texttt{PhyloNetworks}
+\textcolor{red}{\textbf{(reference)}} which is able to plot rooted
+explicit networks, but no implicit networks or unrooted.
+
+\texttt{tanggle} is complementing the \texttt{ape} plotting function in
+two main ways: 1) allowing to plot implicit networks, 2) building on the
+flexibility of \texttt{ggtree} \textcolor{red}{\textbf{(reference)}}
+(which in turns builds on the flexibility of \texttt{ggplot2}
+\textcolor{red}{\textbf{(reference)}}) to manipulate the structure,
+nodes and edges in the network. With the increase (and timely) pressure
+for reproducible research, limiting the use of design software like
+Adobe Illustrator to produce publication figures is paramount. The R
+package \texttt{ggtree} and now \texttt{tanggle} work towards
+script-based publication figures that can incorporate colors, images and
+mapped morphological and geographical characteristics.
+
+\bibliography{ggnetworx.bib}
 
 
 \end{document}
