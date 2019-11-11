@@ -1,5 +1,5 @@
 ## This project
-Ms/data-analysis/*
+ms/data-analysis/*
 
 # Compiled source #
 ###################
@@ -78,7 +78,7 @@ Backup[ ]of[ ]*.numbers/
 
 # julia or R
 *.juliahistory
-*.Rhistory
+*.Rhistory*
 *.err
 *.RData
 *.Rda

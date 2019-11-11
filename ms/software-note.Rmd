@@ -117,7 +117,6 @@ p2
 \missing{(Marta: add here short description of genus)}.
 
 ```{r, echo=FALSE}
-## https://yulab-smu.github.io/treedata-book/chapter4.html#visualizing-phylogenetic-tree-with-ggtree
 library(phangorn)
 trees = read.nexus("data-analysis/output.nex")
 frognet = consensusNet(trees)
@@ -139,21 +138,21 @@ p3
 
 # Explicit network for whales
 
-\missing{(add here short description of whales)}.
+Baleen whales (Mysticeti) represent the largest animals on Earth. Their evolutionary history is complex given the lack of physical barriers in the ocean, and the fact that they hybridize frequently.
+Arnason et al \missing{(cite Arnason 2018)} reconstruct the network-like evolutionary history from a variety of methods, using 34,192 genome fragments, each with 20 kbp long. Reconstructed GF trees with RAxML and GTR with gamma-distributed rate variation with invariable sites. Here we use SNaQ \missing{(cite)} to reconstruct the network with two hybridization events, one of which was already reported in the original paper (from blue whale to gray whale). SNaQ produces the network in extended newick format, which we can read into R and then plot with `tanggle`.
 
 ```{r, echo=FALSE}
-whalesnet = read.evonet(text="(((balMys,Egl00):9.055782863234407)#H13:2.6340479153169807::0.8331903627712247,(Bac00,(((Bbo01,Bbo02):9.41949690722463,(Bmu,#H:0.0::0.013010091110208823)):1.6484045144986545,((#H13:0.19346605673125924::0.16680963722877526,((Erob02,Erob01):1.7595289284120899)#H:8.238071084864815::0.9869899088897912):0.35164828246609625,(Mno00,Bph03):2.146642742731017):0.066043783465627):1.100383484076166):2.6340479153169807);")
+whalesnet = read.evonet(text="(((bowhead,north-atlantic):9.055782863234407)#H13:2.6340479153169807::0.8331903627712247,(minke,((sei:9.41949690722463,(blue,#H:0.0::0.013010091110208823)):1.6484045144986545,((#H13:0.19346605673125924::0.16680963722877526,(gray:1.7595289284120899)#H:8.238071084864815::0.9869899088897912):0.35164828246609625,(humpback,fin):2.146642742731017):0.066043783465627):1.100383484076166):2.6340479153169807);")
 
 label <- whalesnet$tip.label
 library(ggimage)
 p4 = ggevonet(whalesnet,layout = "slanted") +
-    xlim(NA, 10)  +
+    xlim(0,8) + ylim(0,15) +
+    geom_tiplab(geom='label', offset=0.5) +
     geom_tiplab(aes(image=paste0('figures/',label, '.png')), geom="image",
-                offset=1.5, align=2, size=.15)+
-    geom_tiplab(geom='label', offset=0.5, hjust=.1)+
-    geom_hilight(node=22)
+                offset=0)
 ```
-```{r whalesnet, out.width='60%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
+```{r whalesnet, out.width='85%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
 p4
 ```
 

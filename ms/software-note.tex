@@ -195,7 +195,7 @@ Cardona et al.~2008a, 2008b). This format uses the concept of minor
 hybrid edges (edges with \(\gamma < 0.5\)) and major hybrid edges
 (\(\gamma > 0.5\)). By default, we detach the minor hybrid edge at each
 hybrid node to write the extended Newick description of a network as we
-would for a tree, with a repeated label, that of the hybrid node (`\#H1'
+would for a tree, with a repeated label, that of the hybrid node ('\#H1'
 in figure @ref(fig:netNewick)). This description can include edge
 information, formatted as :length:support:\(\gamma\).
 
@@ -359,19 +359,30 @@ genus}{Split network for the Neobatrachus genus}}\label{split-network-for-the-ne
 \section{Explicit network for
 whales}\label{explicit-network-for-whales}}
 
-\textcolor{red}{\textbf{(add here short description of whales)}}.
+Baleen whales (Mysticeti) represent the largest animals on Earth. Their
+evolutionary history is complex given the lack of physical barriers in
+the ocean, and the fact that they hybridize frequently. Arnason et al
+\textcolor{red}{\textbf{(cite Arnason 2018)}} reconstruct the
+network-like evolutionary history from a variety of methods, using
+34,192 genome fragments, each with 20 kbp long. Reconstructed GF trees
+with RAxML and GTR with gamma-distributed rate variation with invariable
+sites. Here we use SNaQ \textcolor{red}{\textbf{(cite)}} to reconstruct
+the network with two hybridization events, one of which was already
+reported in the original paper (from blue whale to gray whale). SNaQ
+produces the network in extended newick format, which we can read into R
+and then plot with \texttt{tanggle}.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/whalesnet-1} 
+{\centering \includegraphics[width=0.85\linewidth]{software-note_files/figure-latex/whalesnet-1} 
 
 }
 
 \caption{Explicit network for whales}\label{fig:whalesnet}
 \end{figure}
 
-\includegraphics{software-note_files/figure-latex/unnamed-chunk-5-1.pdf}
-\# Discussion
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
 
 The area of phylogenetic networks is very active. There are multiple
 developments on the inference of networks, as well as on the
