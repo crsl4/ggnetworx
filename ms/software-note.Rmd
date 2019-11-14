@@ -1,19 +1,22 @@
 --- 
 title: "tanggle: An R package for the visualization of implicit and explicit phylogenetic networks"
-author: klaus, marta, leann, francisco, eran, claudia
-site: bookdown::bookdown_site
+author: klaus, marta, leann, francisco, eren, claudia
 output: 
    pdf_document:
-    toc: false
-    citation_package: natbib
-    keep_tex: yes
+     toc: false
+     citation_package: natbib
+     keep_tex: yes
+     fig_caption: yes
 header-includes:
 - \usepackage[dvipsnames]{xcolor}
 - \newcommand{\missing}[1]{\textcolor{red}{\textbf{#1}}}
 - \newcommand{\revision}[1]{\textcolor{blue}{#1}}
+- \usepackage{setspace}\doublespacing
 - \usepackage{array,ragged2e}
 - \usepackage{float}
-documentclass: IEEEtran
+- \usepackage{lineno}
+- \linenumbers
+documentclass: article
 bibliography: ggnetworx.bib
 biblio-style: apalike
 geometry: margin=0.8in
@@ -41,6 +44,10 @@ Phylogenetic trees are used to represent evolutionary relationships between orga
 Recent years have seen an explosion of phylogenetic network inference methods (\missing{cite everybody}). These methods can be divided into two main classes: methods to reconstruct implicit (or split) networks, and methods to reconstruct explicit networks. Implicit networks are data-displayed objects that include two (or more) options for every uncertain split. For example, in figure \missing{bla}, there are two possible ways to resolve the uncertain split, but the input data (DNA sequences or gene trees) does not provide enough information to distinguish which one is the "correct" split. Or alternatively, both splits are "correct" in that there is a pattern of gene flow among these species. Split networks are fast to reconstruct, but they are limited in their interpretations are they cannot tell us if the discordant splits are due to gene tree estimation error, ILS or actual gene flow.
 Explicit networks, on the contrary, assign a biological mechanism to every internal node, and thus they are easier to interpret. For example, in figure \missing{bla}, the hybrid node corresponds to some reticulation event, and the tree nodes correspond to speciation events. Explicit networks are still limited in that they cannot identify the specific biological mechanism behind a hybrid node (hybridization, horizontal gene transfer, introgression), but hybrid edges are parametrized by an inheritance probability ($\gamma$) that can provide more information. For example, an estimated $\hat{\gamma} \approx 0.5$ could indicate a hybridization event, whereas smaller estimated $\hat{\gamma} \approx 0.01$ could refer to horizontal gene transfer. The downside of explicit networks is that they are harder to reconstruct, and existing inference methods\missing{(reference)} are not scalable enough to handle big data.
 
+```{r nettypes, out.width='35%', fig.cap="\\textbf{Left:} Explicit network. \\textbf{Right:} Split network.",fig.show='hold', fig.align='center'}
+knitr::include_graphics(c('figures/explicit.pdf', 'figures/implicit.pdf'))
+```
+
 \vspace{-0.25cm}
 ## Extended Newick format
 Traditionally, phylogenetic trees are written in Newick format (\missing{reference}). To represent network objects, we use the
@@ -49,14 +56,14 @@ extended Newick format (Morin and Moret 2006; Than et al.
 This format uses the concept of minor
 hybrid edges (edges with $\gamma < 0.5$) and major hybrid edges
 ($\gamma > 0.5$). By default, we detach the minor hybrid edge at each hybrid node to write the extended Newick
-description of a network as we would for a tree, with a repeated label, that of the hybrid node ('#H1' in figure \@ref(fig:netNewick)). This description can include edge
+description of a network as we would for a tree, with a repeated label, that of the hybrid node ('#H1' in figure \ref{fig:netNewick}). This description can include edge
 information, formatted as :length:support:$\gamma$.
 
-```{r netNewick, out.width='35%', fig.cap="Extended Newick format for networks: (((A,(B)\\#H1),(C,\\#H1)),D); The network is written as a tree with two nodes having the same label \\#H1.",fig.show='hold', fig.align='center'}
+```{r netNewick, out.width='35%', fig.cap="Extended Newick format for networks: (((A,(B)\\#H1),(C,\\#H1)),D); The network is written as a tree with two nodes having the same label \\#H1.",fig.show='hold', fig.align='center', fig.pos='H'}
 knitr::include_graphics(c('figures/extendedNewick.pdf', 'figures/extendedNewick2.pdf'))
 ```
 
-For example, the parenthetical format of the network in figure \@ref(fig:netNewick) can include $\gamma$ values: 
+For example, the parenthetical format of the network in figure \ref{fig:netNewick} can include $\gamma$ values: 
 
 `(((A,(B)#H1:::0.8),(C,#H1:::0.2)),D);`, 
 
@@ -77,20 +84,15 @@ There are three types of input data that our package takes to get a split networ
 
 After any of these three steps, we have a `networkx` object that represents a split network by two matrices: 1) standard edge matrix with two columns for the two nodes connecting every edge (row), and 2) split vector with integer identifier for every edge. Each entry in this vector represents the split that each edge is representing. In split networks, there are more edges than splits as two (or more) edges could represent the same split (see figure \missing{bla}).
 
-The `ggsplitnet` function takes a `networkx` object as input, and produces a plot. 
+The `ggsplitnet` function takes a `networkx` object as input, and produces a plot (see Figure \ref{fig:enet} left). 
 
 ```{r, echo=TRUE}
 library(ggnetworx)
 data(yeast, package="phangorn")
 dm <- phangorn::dist.ml(yeast) 
 nnet <- phangorn::neighborNet(dm)
-p = ggsplitnet(nnet) + geom_tiplab2(cex=4.0)
+p = ggsplitnet(nnet) + geom_tiplab2(cex=2.5)
 ```
-
-```{r nnet, out.width='60%', fig.cap="Split network for yeast data", fig.pos='H', fig.align='center'}
-p
-```
-
 
 
 ## Plotting explicit networks
@@ -98,7 +100,7 @@ p
 Algorithms to reconstruct explicit networks are more computationally intensive than those to reconstruct split networks. Thus, to the best of our knowledge, there are no R functions that would estimate an explicit network from sequences or from gene trees. To obtain an explicit network, users need to use existing tools like PhyloNet\missing{(reference)}, BEAST\missing{(reference)} or SNaQ\missing{(reference)}.
 These methods take sequences or gene trees as input and estimate an explicit network which is represented in extended Newick format. The explicit network is read with the `ape` function `read.evonet` and an `evonet` object is created. 
 
-The `evonet` object has two matrices: 1) standard edge matrix with two columns for the two nodes connecting every edge (row), and 2) hybrid edges matrix with two columns for the nodes connected by the hybrid edge (row).
+The `evonet` object has two matrices: 1) standard edge matrix with two columns for the two nodes connecting every edge (row), and 2) hybrid edges matrix with two columns for the nodes connected by the hybrid edge (row). See Figure \ref{fig:enet} right for the plot. 
 
 ```{r, echo=TRUE}
 library(ape)
@@ -107,8 +109,9 @@ enet <- read.evonet(text=net)
 p2 = ggevonet(enet) + geom_tiplab() 
 ```
 
-```{r enet, out.width='60%', fig.cap="Explicit network from extended Newick format", fig.pos='H', fig.align='center'}
-p2
+```{r enet, out.width='50%', fig.cap="\\textbf{Left:} Split network for yeast data. \\textbf{Right:} Explicit network from extended Newick format", fig.pos='H', fig.align='center'}
+library(cowplot)
+plot_grid(p,NULL,p2,nrow=1, rel_widths=c(1,0.2,0.8))
 ```
 
 
@@ -132,7 +135,7 @@ p3 = ggsplitnet(frognet)+geom_tiplab2()+
                           extend = 0)
 ```
 
-```{r frognet, out.width='60%', fig.cap="Explicit network for Neobatrachus genus frogs", fig.pos='H', fig.align='center'}
+```{r frognet, out.width='60%', fig.cap="Split network for Neobatrachus genus frogs", fig.pos='H', fig.align='center'}
 p3
 ```
 
@@ -141,19 +144,49 @@ p3
 Baleen whales (Mysticeti) represent the largest animals on Earth. Their evolutionary history is complex given the lack of physical barriers in the ocean, and the fact that they hybridize frequently.
 Arnason et al \missing{(cite Arnason 2018)} reconstruct the network-like evolutionary history from a variety of methods, using 34,192 genome fragments, each with 20 kbp long. Reconstructed GF trees with RAxML and GTR with gamma-distributed rate variation with invariable sites. Here we use SNaQ \missing{(cite)} to reconstruct the network with two hybridization events, one of which was already reported in the original paper (from blue whale to gray whale). SNaQ produces the network in extended newick format, which we can read into R and then plot with `tanggle`.
 
-```{r, echo=FALSE}
-whalesnet = read.evonet(text="(((bowhead,north-atlantic):9.055782863234407)#H13:2.6340479153169807::0.8331903627712247,(minke,((sei:9.41949690722463,(blue,#H:0.0::0.013010091110208823)):1.6484045144986545,((#H13:0.19346605673125924::0.16680963722877526,(gray:1.7595289284120899)#H:8.238071084864815::0.9869899088897912):0.35164828246609625,(humpback,fin):2.146642742731017):0.066043783465627):1.100383484076166):2.6340479153169807);")
-
-label <- whalesnet$tip.label
+```{r, echo=FALSE, include=FALSE}
 library(ggimage)
+library(viridis)
+whalesnet = read.evonet(text="(((bowhead,north-atlantic)eleven:9.055782863234407)#H10:2.6340479153169807::0.8331903627712247,(minke,((sei:9.41949690722463,(blue,#H18:0.0::0.013010091110208823)fifteen)fourteen:1.6484045144986545,((#H10:0.19346605673125924::0.16680963722877526,(gray:1.7595289284120899)#H18:8.238071084864815::0.9869899088897912)seventeen:0.35164828246609625,(humpback,fin)nineteen:2.146642742731017)sixteen:0.066043783465627)thirteen:1.100383484076166)twelve:2.6340479153169807)nine;")
+label <- whalesnet$tip.label
+
+p <- ggevonet(whalesnet) 
+
+dat = read.csv("data-analysis/internal-nodes-traits.csv")
+dat$nodenum = NULL
+
+## We need to add two more rows because nodes 15 and 17 are repeated in p$data
+dat2 = data.frame(label=p$data$label, trait = c(dat$trait,dat$trait[15], dat$trait[17]))
+
+## Now we merge dataframes:
+p2 <- p %<+% dat2
+##p2$data
+
+## Finally, we plot:
+p3 <- p2 + 
+    geom_tiplab(offset = .6, hjust = .5) +
+    geom_tippoint(aes(size=trait, color=trait)) +
+    geom_nodepoint(aes(size=trait, color=trait)) + 
+    theme(legend.position = "none") + scale_size_continuous(range = c(3, 10))
+
 p4 = ggevonet(whalesnet,layout = "slanted") +
     xlim(0,8) + ylim(0,15) +
     geom_tiplab(geom='label', offset=0.5) +
     geom_tiplab(aes(image=paste0('figures/',label, '.png')), geom="image",
                 offset=0)
+
+p5 <- p2 + 
+     xlim(0,8) + ylim(0,15) +
+    geom_tiplab(geom='label', offset=0.75) +
+    geom_tiplab(aes(image=paste0('figures/',label, '.png')), geom="image",
+                offset=0.2) +
+    geom_tippoint(aes(size=trait, color=trait)) +
+    geom_nodepoint(aes(size=trait, color=trait)) + 
+    theme(legend.position = "none") + scale_size_continuous(range = c(2, 6)) +
+    scale_colour_viridis_c(begin=0.25, end=1)
 ```
-```{r whalesnet, out.width='85%', fig.cap="Explicit network for whales", fig.pos='H', fig.align='center'}
-p4
+```{r whalesnet, out.width='85%', fig.cap="Explicit network for whales: ancestral state reconstruction of population size: color and size", fig.pos='H', fig.align='center'}
+p5
 ```
 
 # Discussion
@@ -162,3 +195,4 @@ The area of phylogenetic networks is very active. There are multiple development
 
 `tanggle` is complementing the `ape` plotting function in two main ways: 1) allowing to plot implicit networks, 2) building on the flexibility of `ggtree` \missing{(reference)} (which in turns builds on the flexibility of `ggplot2` \missing{(reference)}) to manipulate the structure, nodes and edges in the network.
 With the increase (and timely) pressure for reproducible research, limiting the use of design software like Adobe Illustrator to produce publication figures is paramount. The R package `ggtree` and now `tanggle` work towards script-based publication figures that can incorporate colors, images and mapped morphological and geographical characteristics.
+Furthermore, `ggtree` and thus `tanggle` are based on underlying data frames to represent the phylogenies, which allow a lot of flexibility on things mapped and colors and everything.

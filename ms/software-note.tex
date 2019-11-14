@@ -1,4 +1,4 @@
-\documentclass[]{IEEEtran}
+\documentclass[]{article}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -25,7 +25,7 @@
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={tanggle: An R package for the visualization of implicit and explicit phylogenetic networks},
-            pdfauthor={klaus, marta, leann, francisco, eran, claudia},
+            pdfauthor={klaus, marta, leann, francisco, eren, claudia},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -120,7 +120,7 @@
 phylogenetic networks}
     \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-    \author{klaus, marta, leann, francisco, eran, claudia}
+    \author{klaus, marta, leann, francisco, eren, claudia}
     \preauthor{\centering\large\emph}
   \postauthor{\par}
     \date{}
@@ -129,8 +129,13 @@ phylogenetic networks}
 \usepackage[dvipsnames]{xcolor}
 \newcommand{\missing}[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand{\revision}[1]{\textcolor{blue}{#1}}
+\usepackage{setspace}
+
+\doublespacing
 \usepackage{array,ragged2e}
 \usepackage{float}
+\usepackage{lineno}
+\linenumbers
 
 \begin{document}
 \maketitle
@@ -183,6 +188,15 @@ reconstruct, and existing inference
 methods\textcolor{red}{\textbf{(reference)}} are not scalable enough to
 handle big data.
 
+\begin{figure}
+
+{\centering \includegraphics[width=0.35\linewidth]{figures/explicit} \includegraphics[width=0.35\linewidth]{figures/implicit} 
+
+}
+
+\caption{\textbf{Left:} Explicit network. \textbf{Right:} Split network.}\label{fig:nettypes}
+\end{figure}
+
 \vspace{-0.25cm}
 
 \hypertarget{extended-newick-format}{%
@@ -196,10 +210,10 @@ hybrid edges (edges with \(\gamma < 0.5\)) and major hybrid edges
 (\(\gamma > 0.5\)). By default, we detach the minor hybrid edge at each
 hybrid node to write the extended Newick description of a network as we
 would for a tree, with a repeated label, that of the hybrid node ('\#H1'
-in figure @ref(fig:netNewick)). This description can include edge
+in figure \ref{fig:netNewick}). This description can include edge
 information, formatted as :length:support:\(\gamma\).
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=0.35\linewidth]{figures/extendedNewick} \includegraphics[width=0.35\linewidth]{figures/extendedNewick2} 
 
@@ -209,7 +223,7 @@ information, formatted as :length:support:\(\gamma\).
 \end{figure}
 
 For example, the parenthetical format of the network in figure
-@ref(fig:netNewick) can include \(\gamma\) values:
+\ref{fig:netNewick} can include \(\gamma\) values:
 
 \texttt{(((A,(B)\#H1:::0.8),(C,\#H1:::0.2)),D);},
 
@@ -279,7 +293,7 @@ there are more edges than splits as two (or more) edges could represent
 the same split (see figure \textcolor{red}{\textbf{bla}}).
 
 The \texttt{ggsplitnet} function takes a \texttt{networkx} object as
-input, and produces a plot.
+input, and produces a plot (see Figure \ref{fig:enet} left).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -287,18 +301,9 @@ input, and produces a plot.
 \KeywordTok{data}\NormalTok{(yeast, }\DataTypeTok{package=}\StringTok{"phangorn"}\NormalTok{)}
 \NormalTok{dm <-}\StringTok{ }\NormalTok{phangorn}\OperatorTok{::}\KeywordTok{dist.ml}\NormalTok{(yeast) }
 \NormalTok{nnet <-}\StringTok{ }\NormalTok{phangorn}\OperatorTok{::}\KeywordTok{neighborNet}\NormalTok{(dm)}
-\NormalTok{p =}\StringTok{ }\KeywordTok{ggsplitnet}\NormalTok{(nnet) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_tiplab2}\NormalTok{(}\DataTypeTok{cex=}\FloatTok{4.0}\NormalTok{)}
+\NormalTok{p =}\StringTok{ }\KeywordTok{ggsplitnet}\NormalTok{(nnet) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_tiplab2}\NormalTok{(}\DataTypeTok{cex=}\FloatTok{2.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{figure}[H]
-
-{\centering \includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/nnet-1} 
-
-}
-
-\caption{Split network for yeast data}\label{fig:nnet}
-\end{figure}
 
 \hypertarget{plotting-explicit-networks}{%
 \subsection{Plotting explicit
@@ -320,7 +325,7 @@ object is created.
 The \texttt{evonet} object has two matrices: 1) standard edge matrix
 with two columns for the two nodes connecting every edge (row), and 2)
 hybrid edges matrix with two columns for the nodes connected by the
-hybrid edge (row).
+hybrid edge (row). See Figure \ref{fig:enet} right for the plot.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -333,11 +338,11 @@ hybrid edge (row).
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.6\linewidth]{software-note_files/figure-latex/enet-1} 
+{\centering \includegraphics[width=0.5\linewidth]{software-note_files/figure-latex/enet-1} 
 
 }
 
-\caption{Explicit network from extended Newick format}\label{fig:enet}
+\caption{\textbf{Left:} Split network for yeast data. \textbf{Right:} Explicit network from extended Newick format}\label{fig:enet}
 \end{figure}
 
 \hypertarget{split-network-for-the-neobatrachus-genus}{%
