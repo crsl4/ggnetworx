@@ -29,8 +29,6 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
-\usepackage{natbib}
-\bibliographystyle{apalike}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -136,6 +134,8 @@ phylogenetic networks}
 \usepackage{float}
 \usepackage{lineno}
 \linenumbers
+\usepackage[numbers]{natbib}
+\bibliographystyle{nihunsrt}
 
 \begin{document}
 \maketitle
@@ -159,18 +159,20 @@ that does not capture reticulate evolution like horizontal gene
 transfer, hybridization or introgression.
 
 Recent years have seen an explosion of phylogenetic network inference
-methods (\textcolor{red}{\textbf{cite everybody}}). These methods can be
-divided into two main classes: methods to reconstruct implicit (or
-split) networks, and methods to reconstruct explicit networks. Implicit
-networks are data-displayed objects that include two (or more) options
-for every uncertain split. For example, in figure
-\textcolor{red}{\textbf{bla}}, there are two possible ways to resolve
-the uncertain split, but the input data (DNA sequences or gene trees)
-does not provide enough information to distinguish which one is the
-``correct'' split. Or alternatively, both splits are ``correct'' in that
-there is a pattern of gene flow among these species. Split networks are
-fast to reconstruct, but they are limited in their interpretations are
-they cannot tell us if the discordant splits are due to gene tree
+methods (\textcolor{red}{\textbf{cite everybody}}: yu2014, wen2018,
+zhang2018,
+\cite{Solis-Lemus2016, Huson2010, Gruenewald2013, Than2008, Yang2014}.
+These methods can be divided into two main classes: methods to
+reconstruct implicit (or split) networks, and methods to reconstruct
+explicit networks. Implicit networks are data-displayed objects that
+include two (or more) options for every uncertain split. For example, in
+figure \textcolor{red}{\textbf{bla}}, there are two possible ways to
+resolve the uncertain split, but the input data (DNA sequences or gene
+trees) does not provide enough information to distinguish which one is
+the ``correct'' split. Or alternatively, both splits are ``correct'' in
+that there is a pattern of gene flow among these species. Split networks
+are fast to reconstruct, but they are limited in their interpretations
+are they cannot tell us if the discordant splits are due to gene tree
 estimation error, ILS or actual gene flow. Explicit networks, on the
 contrary, assign a biological mechanism to every internal node, and thus
 they are easier to interpret. For example, in figure
@@ -357,7 +359,7 @@ genus}{Split network for the Neobatrachus genus}}\label{split-network-for-the-ne
 
 }
 
-\caption{Explicit network for Neobatrachus genus frogs}\label{fig:frognet}
+\caption{Split network for Neobatrachus genus frogs}\label{fig:frognet}
 \end{figure}
 
 \hypertarget{explicit-network-for-whales}{%
@@ -383,7 +385,7 @@ and then plot with \texttt{tanggle}.
 
 }
 
-\caption{Explicit network for whales}\label{fig:whalesnet}
+\caption{Explicit network for whales: ancestral state reconstruction of population size: color and size}\label{fig:whalesnet}
 \end{figure}
 
 \hypertarget{discussion}{%
@@ -417,9 +419,14 @@ for reproducible research, limiting the use of design software like
 Adobe Illustrator to produce publication figures is paramount. The R
 package \texttt{ggtree} and now \texttt{tanggle} work towards
 script-based publication figures that can incorporate colors, images and
-mapped morphological and geographical characteristics.
+mapped morphological and geographical characteristics. Furthermore,
+\texttt{ggtree} and thus \texttt{tanggle} are based on underlying data
+frames to represent the phylogenies, which allow a lot of flexibility on
+things mapped and colors and everything.
 
-\bibliography{ggnetworx.bib}
+\pagebreak
+
+\bibliography{tanggle} % Use the NIHGrant.bib file for the reference list
 
 
 \end{document}

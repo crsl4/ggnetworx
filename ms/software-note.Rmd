@@ -3,8 +3,9 @@ title: "tanggle: An R package for the visualization of implicit and explicit phy
 author: klaus, marta, leann, francisco, eren, claudia
 output: 
    pdf_document:
+     includes:
+        after_body: bib.tex
      toc: false
-     citation_package: natbib
      keep_tex: yes
      fig_caption: yes
 header-includes:
@@ -16,8 +17,10 @@ header-includes:
 - \usepackage{float}
 - \usepackage{lineno}
 - \linenumbers
+- \usepackage[numbers]{natbib}
+- \bibliographystyle{nihunsrt}
 documentclass: article
-bibliography: ggnetworx.bib
+bibliography: tanggle.bib
 biblio-style: apalike
 geometry: margin=0.8in
 link-citations: yes
@@ -41,8 +44,9 @@ Here we present an extension to the widely used visualization package `ggtree` t
 
 Phylogenetic trees are used to represent evolutionary relationships between organisms. However, the tree is a strictly bifurcating structure that does not capture reticulate evolution like horizontal gene transfer, hybridization or introgression.
 
-Recent years have seen an explosion of phylogenetic network inference methods (\missing{cite everybody}). These methods can be divided into two main classes: methods to reconstruct implicit (or split) networks, and methods to reconstruct explicit networks. Implicit networks are data-displayed objects that include two (or more) options for every uncertain split. For example, in figure \missing{bla}, there are two possible ways to resolve the uncertain split, but the input data (DNA sequences or gene trees) does not provide enough information to distinguish which one is the "correct" split. Or alternatively, both splits are "correct" in that there is a pattern of gene flow among these species. Split networks are fast to reconstruct, but they are limited in their interpretations are they cannot tell us if the discordant splits are due to gene tree estimation error, ILS or actual gene flow.
-Explicit networks, on the contrary, assign a biological mechanism to every internal node, and thus they are easier to interpret. For example, in figure \missing{bla}, the hybrid node corresponds to some reticulation event, and the tree nodes correspond to speciation events. Explicit networks are still limited in that they cannot identify the specific biological mechanism behind a hybrid node (hybridization, horizontal gene transfer, introgression), but hybrid edges are parametrized by an inheritance probability ($\gamma$) that can provide more information. For example, an estimated $\hat{\gamma} \approx 0.5$ could indicate a hybridization event, whereas smaller estimated $\hat{\gamma} \approx 0.01$ could refer to horizontal gene transfer. The downside of explicit networks is that they are harder to reconstruct, and existing inference methods\missing{(reference)} are not scalable enough to handle big data.
+Recent years have seen an explosion of phylogenetic network inference methods (\missing{cite everybody}: yu2014, wen2018, zhang2018, \cite{Solis-Lemus2016, Huson2010, Gruenewald2013, Than2008, Yang2014}. These methods can be divided into two main classes: methods to reconstruct implicit (or split) networks, and methods to reconstruct explicit networks. Implicit networks are data-displayed objects that include two (or more) options for every uncertain split. For example, in figure \ref{fig:nettypes} right, there are two possible ways to resolve the uncertain split: 1) by considering the longer edges of the rectangle to be the correct split (making the two spiders on the bottom sister species) or 2) by considering the shorter edges of the rectangle to be the correct split (making the two spiders on the right sister species).
+However, the input data (DNA sequences or gene trees) does not provide enough information to distinguish which one is the "correct" split. Or alternatively, both splits are "correct" in that there is a pattern of gene flow among these species. Split networks are fast to reconstruct, but they are limited in their interpretations are they cannot tell us if the discordant splits are due to gene tree estimation error, ILS or actual gene flow.
+Explicit networks, on the contrary, assign a biological mechanism to every internal node, and thus they are easier to interpret. For example, in figure \ref{fig:nettypes} left, the hybrid node (where the green arrow is pointing) corresponds to some reticulation event, and the tree nodes correspond to speciation events. Explicit networks are still limited in that they cannot identify the specific biological mechanism behind a hybrid node (hybridization, horizontal gene transfer, introgression), but hybrid edges are parametrized by an inheritance probability ($\gamma$) that can provide more information. For example, an estimated $\hat{\gamma} \approx 0.5$ could indicate a hybridization event, whereas smaller estimated $\hat{\gamma} \approx 0.01$ could refer to horizontal gene transfer. The downside of explicit networks is that they are harder to reconstruct, and existing inference methods\cite{Yu2014, Wen2018, Zhang2018, Solis-Lemus2016} are not scalable enough to handle big data.
 
 ```{r nettypes, out.width='35%', fig.cap="\\textbf{Left:} Explicit network. \\textbf{Right:} Split network.",fig.show='hold', fig.align='center'}
 knitr::include_graphics(c('figures/explicit.pdf', 'figures/implicit.pdf'))
